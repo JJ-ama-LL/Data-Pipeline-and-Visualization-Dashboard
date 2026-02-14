@@ -1,0 +1,4 @@
+requests
+ipykernel
+pandas
+numpy

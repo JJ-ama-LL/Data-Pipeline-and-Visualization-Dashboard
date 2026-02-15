@@ -2,4 +2,6 @@ requests
 pathlib
 ipykernel
 pandas
+pyarrow
+polars
 numpy

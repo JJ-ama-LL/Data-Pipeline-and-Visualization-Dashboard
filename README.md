@@ -16,8 +16,7 @@ This project presents an interactive dashboard that explores NYC taxi trip data,
 
 ```
 ├── assignment1_dashboard/      # Streamlit dashboard app.py
-    ├── .streamlit/ 
-├── data/
+├── data/                       # Directory created by Notebook
 │   ├── raw/                    # Raw datasets
 │   └── clean/                  # Processed datasets
 ├── assignment1.ipynb           # Exploration and analysis notebooks
@@ -34,25 +33,18 @@ git clone https://github.com/JJ-ama-LL/Data-Pipeline-and-Visualization-Dashboard
 cd Data-Pipeline-and-Visualization-Dashboard
 ```
 
-### 2. Create a virtual environment (recommended)
-
-```
-python -m venv venv
-source venv/bin/activate   # macOS/Linux
-venv\Scripts\activate      # Windows
-```
-
-### 3. Install dependencies
+### 2. Install dependencies
 
 ```
 pip install -r requirements.txt
 ```
 
-### 4. Run the Jupyter Notebook
+### 3. Run the Jupyter Notebook
 
-### 5. Run the Streamlit app
+### 4. Run the Streamlit app
 
 ```
+cd assignment1_dashboard
 streamlit run app.py
 ```
 

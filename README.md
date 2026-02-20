@@ -56,7 +56,6 @@ Raw taxi trip data and zone lookup files should be placed in the `data/raw` dire
 
 ## Deployed Dashboard
 
-👉 Add your deployed URL here:
 `https://nyc-yellow-taxi-data-dashboard.streamlit.app`
 
 ## Insights

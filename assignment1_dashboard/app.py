@@ -96,7 +96,7 @@ def load_data():
 
     df = pd.read_parquet(taxi_path)
 
-    df = df.sample(n=100000, random_state=42) 
+    df = df.sample(n=1000000, random_state=42) 
 
     df = clean_data(df)
     zones_df = pd.read_csv(zone_path)

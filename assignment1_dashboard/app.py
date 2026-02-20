@@ -50,6 +50,13 @@ st.set_page_config(
 # Add a title to the dashboard
 st.title("NYC Yellow Taxi Data Dashboard")
 
+st.markdown("""
+        This dashboard provides insights into the NYC Yellow Taxi trips for January 2024. The data has been programmatically downloaded, validated and cleaned to ensure 
+        accuracy and reliability from which the dashboard then displays metrics and graphical visualizations of the data such as bar charts, line charts, histograms, pie charts,
+        and heatmaps in order to help users understand patterns in taxi usage. Make use of the filters in the sidebar to explore different aspects of the data, 
+        by adjusting ranges including trip dates, pickup hours and payment types to dynamically update the visualizations accordingly to your desired selections. 
+""")
+
 # Create tabs for different visualizations
 tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
     "Metrics Overview",
@@ -169,6 +176,13 @@ with tab2:
     )
     st.plotly_chart(fig1, use_container_width=True)
 
+    st.markdown("""The above horizontal bar chart shows the top pickup zones by their total trip count from the sample of the dataset. 
+                It can be seen that a very small amount of zones, being the top four, account for a large majority of the total trips. We can 
+                infer from this that the top four zones possesses a very high demand for taxis which may correlate to the level of activity seen
+                in these areas. Below these top four zones, there is a small decrease in the amount of total trips seen suggesting that these areas 
+                consists of less activity or maybe even the demand for taxis in these areas is much lower.
+    """)
+
 with tab3:
     # Groups average fare amount by pickup hour
     hourly_fare = (
@@ -205,10 +219,23 @@ with tab3:
     )
     st.plotly_chart(fig2, use_container_width=True)
 
+    st.markdown("""The above line graph displays the fare amount seen at each hour of the day. From this graph we see a very
+                high increase in the fare amount compared to other hours in the early morning of the day however, a few hours 
+                before this spike, we also see the lowest fare amount. We can infer from this that the lowest fare amount is due to not 
+                many people requiring a taxi as they may still be at home or asleep and we can account the very large spike in the fare to 
+                correlate to the time when most people are on their way to work, school or any of their other daily activities. The fare from 
+                then on remains at a consistent value throughout the day.            
+    """)
+
 with tab4:
+    # Filter out trips with unrealistic distances for better visualization
+    hist_filtered = filtered_df[
+    (filtered_df['trip_distance'] > 0) & (filtered_df['trip_distance'] < 20)
+    ]
+
     # Create histogram for trip distance distribution
     fig3 = px.histogram(
-        filtered_df,
+        hist_filtered,
         x="trip_distance",
         nbins=50,
         title="Distribution of Trip Distances",
@@ -223,13 +250,19 @@ with tab4:
     fig3.update_traces(marker_line_width=0.5, marker_line_color="white", hovertemplate='Trip Distance: %{x}<br>Count: %{y}<extra></extra>')
 
     fig3.update_layout(
-        title=dict(text="Distribution of Trip Distances (Trips ≤ 50 miles)", x=0.5, font=dict(size=20)),
+        title=dict(text="Distribution of Trip Distances (Trips ≤ 20 miles)", x=0.5, font=dict(size=20)),
         xaxis=dict(range=[0, 20], title="Trip Distance (miles)", tick0=0, dtick=2),
         yaxis=dict(title="Number of Trips", showgrid=True),
         font=dict(family="Arial", size=12),
         bargap=0.05
     )
     st.plotly_chart(fig3, use_container_width=True)
+
+    st.markdown("""The above histogram show a distribution of the trip distances seen from the dataset. From this we can 
+                infer that only very rarely do people take very long taxi rides differing greatly from the amount of trips 
+                we see with very short distances. This provides the insight that most people prefer to not spend the added 
+                costs attached to a very long taxi trip but rather use taxis as method of convenience.
+    """)
 
 with tab5:
     color_sequence = ["#2ca02c", "#1f77b4", "#ff7f0e", "#d62728", "#7f7f7f"]
@@ -264,6 +297,12 @@ with tab5:
         font=dict(family="Arial", size=12)
     )
     st.plotly_chart(fig4, use_container_width=True)
+
+    st.markdown("""The above pie chart shows the breakdown of the most used payment types across all trips in the dataset. We can 
+                see that an extremely large amount of the payments are confirmed usign Credit Cards with Cash following behind. We can 
+                infer from this that the taxi industry of New York City consists mostly of digital transactions rather than physical cash ones. 
+                This also shows that many of the people of make use of the taxi service frequently are those who are qualified and able to possess a credit card.
+    """)
 
 with tab6:
     # Create heatmap data by counting trips for each combination of pickup day of week and hour
@@ -316,3 +355,11 @@ with tab6:
         )
     )
     st.plotly_chart(fig5, use_container_width=True)
+
+    st.markdown("""Lastly, this heatmap displays trips grouped and organized by their associated day and hour of pickup. 
+                From this map, we see that the busiest period for taxis is Wednesday between hours 15 - 19. Alongside this 
+                we can also see significant activity at this axact time across all days of the week excluding Sunday. This 
+                can be tied to the fact during the weekday, a lot of people are travelling to different places and the overall 
+                activity is high. This time everyday also correlates to aa very common time where most businesses or schools may 
+                close for the day which also plays a role in the increased activity seen.
+    """)

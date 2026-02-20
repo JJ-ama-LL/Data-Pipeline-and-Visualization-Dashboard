@@ -43,7 +43,7 @@ def clean_data(df):
     df["pickup_day_of_week"] = df["tpep_pickup_datetime"].dt.day_name()
 
     # Calculate trip speed in mph, handling cases where duration is zero
-    df["trip_speed_mph"] = 0
+    df["trip_speed_mph"] = 0.0
     mask = df["trip_duration_minutes"] > 0
     df.loc[mask, "trip_speed_mph"] = (
         df.loc[mask, "trip_distance"] /

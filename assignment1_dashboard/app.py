@@ -2,6 +2,17 @@ import streamlit as st
 import pandas as pd
 from pathlib import Path
 import plotly.express as px
+import requests
+
+def download_file(url, path):
+    if path.exists():
+        return
+     
+    with requests.get(url, stream=True, timeout=30) as r:
+        r.raise_for_status()
+        with open(path, "wb") as f:
+            for chunk in r.iter_content(chunk_size=8192):
+                f.write(chunk)
 
 def clean_data(df):
     # Define critical columns
@@ -70,20 +81,22 @@ tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
 # Load Cleaned data with caching to optimize performance
 @st.cache_data
 def load_data():
+    taxi_url = "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2024-01.parquet"
+    zone_url = "https://d37ci6vzurychx.cloudfront.net/misc/taxi_zone_lookup.csv"
+
     BASE_DIR = Path(__file__).resolve().parent.parent
-    clean_dir = BASE_DIR / "data" / "clean"
-    raw_dir = BASE_DIR / "data" / "raw"
+    data_dir = BASE_DIR / "data" / "raw"
+    data_dir.mkdir(parents=True, exist_ok=True)
 
-    clean_data_path = clean_dir / "yellow_tripdata_2024-01_clean.parquet"
-    zones_path = raw_dir / "taxi_zone_lookup.csv"
+    taxi_path = data_dir / "yellow_tripdata_2024-01.parquet"
+    zone_path = data_dir / "taxi_zone_lookup.csv"
 
-    if clean_data_path.exists():
-        df = pd.read_parquet(clean_data_path)
-    else:
-        raw_data_path = raw_dir / "yellow_tripdata_2024-01.parquet"
-        df = pd.read_parquet(raw_data_path)
-        df = clean_data(df)
-    zones_df = pd.read_csv(zones_path)
+    download_file(taxi_url, taxi_path)
+    download_file(zone_url, zone_path)
+
+    df = pd.read_parquet(taxi_path)
+    df = clean_data(df)
+    zones_df = pd.read_csv(zone_path)
 
     return df, zones_df
 

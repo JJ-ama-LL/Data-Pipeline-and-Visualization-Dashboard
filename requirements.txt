@@ -7,3 +7,4 @@ polars==1.38.1
 numpy==1.26.1
 duckdb==1.4.4
 streamlit==1.30.0
+plotly==5.17.0
